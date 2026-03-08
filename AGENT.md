@@ -1,11 +1,11 @@
-# Agent.md - BigTime Navigation Framework Guide for AI Agents
+# Agent.md - NavTime Navigation Framework Guide for AI Agents
 
-This guide explains how to implement navigation in SwiftUI apps using the BigTime framework. Follow these patterns exactly.
+This guide explains how to implement navigation in SwiftUI apps using the NavTime framework. Follow these patterns exactly.
 
 ## Quick Reference
 
 ```swift
-import BigTime
+import NavTime
 
 // Access router from any view
 @Environment(Router<AppRoute>.self) var router
@@ -41,7 +41,7 @@ tabRouter.hasUniversalOverlay                              // Check if overlay a
 Create an enum that conforms to `Routable`. The enum IS the view - implement the `body` property to render screens.
 
 ```swift
-import BigTime
+import NavTime
 import SwiftUI
 
 @MainActor  // REQUIRED - all Route enums must be @MainActor
@@ -92,7 +92,7 @@ enum AppRoute: Routable {
 Wrap your app content in `RouterView` to enable navigation.
 
 ```swift
-import BigTime
+import NavTime
 import SwiftUI
 
 @main
@@ -322,7 +322,7 @@ router.sheet(.editItem(item)) {
 
 ### Hierarchical Sheets (Sheets from Sheets)
 
-Call `sheet()` from within a sheet - BigTime automatically handles the hierarchy:
+Call `sheet()` from within a sheet - NavTime automatically handles the hierarchy:
 
 ```swift
 // In SettingsView (already presented as a sheet)
@@ -500,7 +500,7 @@ enum AppRoute: Routable {
 
 ### 2. Modal Conflict Resolution
 
-BigTime prevents presenting sheet + fullScreenCover simultaneously. If you call `sheet()` while a fullScreenCover is active (or vice versa), it automatically:
+NavTime prevents presenting sheet + fullScreenCover simultaneously. If you call `sheet()` while a fullScreenCover is active (or vice versa), it automatically:
 1. Dismisses the current modal
 2. Waits 350ms for animation
 3. Presents the new modal
@@ -581,7 +581,7 @@ RouterView(root: AppRoute.home) { screenName in
 ## Complete Example
 
 ```swift
-import BigTime
+import NavTime
 import SwiftUI
 
 @MainActor
@@ -697,7 +697,7 @@ struct AboutView: View {
 
     var body: some View {
         VStack {
-            Text("BigTime Navigation Framework")
+            Text("NavTime Navigation Framework")
             Button("Close All") {
                 router.dismissAllSheets()
             }

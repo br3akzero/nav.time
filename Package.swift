@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-	name: "BigTime",
+	name: "NavTime",
 	platforms: [
 		.iOS(.v17),
 		.macOS(.v14),
@@ -14,17 +14,17 @@ let package = Package(
 	],
 	products: [
 		.library(
-			name: "BigTime",
-			targets: ["BigTime"]
+			name: "NavTime",
+			targets: ["NavTime"]
 		)
 	],
 	targets: [
 		.target(
-			name: "BigTime"
+			name: "NavTime"
 		),
 		.testTarget(
-			name: "BigTimeTests",
-			dependencies: ["BigTime"]
+			name: "NavTimeTests",
+			dependencies: ["NavTime"]
 		),
 	]
 )

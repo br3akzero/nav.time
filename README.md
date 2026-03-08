@@ -1,8 +1,8 @@
-# BigTime
+# NavTime
 
 **Type-safe, protocol-driven navigation framework for SwiftUI apps**
 
-BigTime is a reusable Swift Package that provides a robust navigation system for SwiftUI applications. It supports push navigation, sheet presentations, full-screen covers, and tab-based navigation with independent stacks per tab.
+NavTime is a reusable Swift Package that provides a robust navigation system for SwiftUI applications. It supports push navigation, sheet presentations, full-screen covers, and tab-based navigation with independent stacks per tab.
 
 ## Features
 
@@ -22,7 +22,7 @@ BigTime is a reusable Swift Package that provides a robust navigation system for
 
 ### Swift Package Manager
 
-Add BigTime to your project via Xcode:
+Add NavTime to your project via Xcode:
 
 1. File → Add Package Dependencies...
 2. Enter the repository URL
@@ -33,12 +33,12 @@ Or add it to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/br3akzero/BigTime.git", from: "1.0.0")
+    .package(url: "https://github.com/br3akzero/NavTime.git", from: "1.0.0")
 ],
 targets: [
     .target(
         name: "YourApp",
-        dependencies: ["BigTime"]
+        dependencies: ["NavTime"]
     )
 ]
 ```
@@ -50,7 +50,7 @@ targets: [
 Create a `Route` enum that conforms to `Routable`:
 
 ```swift
-import BigTime
+import NavTime
 import SwiftUI
 
 enum Route: Routable {
@@ -125,7 +125,7 @@ extension Route: View {
 ### 2. Use RouterView in Your App
 
 ```swift
-import BigTime
+import NavTime
 import SwiftUI
 
 @main
@@ -141,7 +141,7 @@ struct MyApp: App {
 ### 3. Navigate in Your Views
 
 ```swift
-import BigTime
+import NavTime
 import SwiftUI
 
 struct HomeScreen: View {
@@ -170,7 +170,7 @@ struct HomeScreen: View {
 ### 1. Define Your TabRoute Enum
 
 ```swift
-import BigTime
+import NavTime
 import SwiftUI
 
 enum TabRoute: TabRoutable {
@@ -221,7 +221,7 @@ extension TabRoute: CustomStringConvertible {
 ### 2. Use TabRouterView in Your App
 
 ```swift
-import BigTime
+import NavTime
 import SwiftUI
 
 @main
@@ -498,9 +498,9 @@ Contributions are welcome! Please:
 
 ## Support
 
-- [Documentation](https://github.com/br3akzero/BigTime#readme)
-- [Issue Tracker](https://github.com/br3akzero/BigTime/issues)
-- [Discussions](https://github.com/br3akzero/BigTime/discussions)
+- [Documentation](https://github.com/br3akzero/NavTime#readme)
+- [Issue Tracker](https://github.com/br3akzero/NavTime/issues)
+- [Discussions](https://github.com/br3akzero/NavTime/discussions)
 
 ## Author
 

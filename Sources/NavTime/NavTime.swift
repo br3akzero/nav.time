@@ -1,15 +1,15 @@
 //
-// BigTime.swift
-// BigTime - Type-safe SwiftUI navigation framework
+// NavTime.swift
+// NavTime - Type-safe SwiftUI navigation library
 //
 // macOS(26.1) with Swift(6.0)
 // 03.12.25
 //
 
-/// BigTime is a type-safe, protocol-driven navigation framework for SwiftUI apps.
+/// NavTime is a type-safe, protocol-driven navigation library for SwiftUI apps.
 ///
 /// ## Overview
-/// BigTime provides a reusable navigation system that supports:
+/// NavTime provides a reusable navigation system that supports:
 /// - Push navigation with NavigationStack
 /// - Sheet and full-screen cover presentations
 /// - Tab-based navigation with independent stacks per tab

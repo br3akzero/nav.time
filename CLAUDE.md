@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BigTime is a type-safe, protocol-driven navigation library for SwiftUI applications. It provides a reusable routing system supporting push navigation, sheet presentations, full-screen covers, and tab-based navigation with independent stacks per tab.
+NavTime is a type-safe, protocol-driven navigation library for SwiftUI applications. It provides a reusable routing system supporting push navigation, sheet presentations, full-screen covers, and tab-based navigation with independent stacks per tab.
 
 ## Build and Test Commands
 
@@ -19,7 +19,7 @@ swift test
 swift build -c release
 
 # Generate and open documentation (if using DocC)
-swift package generate-documentation --target BigTime
+swift package generate-documentation --target NavTime
 ```
 
 ## Architecture
@@ -147,7 +147,7 @@ The library supports persistent overlay views that float above navigation conten
 
 ## Testing
 
-Tests use Swift Testing framework (`import Testing`). Current test coverage is minimal (see Tests/BigTimeTests/BigTimeTests.swift:4-6).
+Tests use Swift Testing framework (`import Testing`). Current test coverage is minimal (see Tests/NavTimeTests/NavTimeTests.swift:4-6).
 
 When adding tests, focus on:
 - Router navigation stack manipulation (push/pop/popToRoot/switchRoot)
