@@ -28,7 +28,7 @@ swift package generate-documentation --target NavTime
 
 The library is built around two primary router types and their corresponding protocols:
 
-1. **Router<Route>** (Router.swift:16) - Manages single-stack navigation
+1. **Router<Route>** (Router.swift:25) - Manages single-stack navigation
    - Handles push navigation via NavigationStack
    - Manages sheet and full-screen cover presentations
    - Uses `@Observable` for SwiftUI state management
@@ -82,7 +82,7 @@ The library is built around two primary router types and their corresponding pro
 
 5. **Dismiss handlers** - Optional callbacks execute after modal dismissal (e.g., refresh data after settings closed)
 
-6. **Automatic hierarchical sheets** - The `sheet()` method automatically detects if it's called from within an existing sheet and creates a child sheet. No need for separate `childSheet()` method. Uses a `sheetStack: [SheetPresentation<Route>]` internally to track the hierarchy (Router.swift:147-157).
+6. **Automatic hierarchical sheets** - The `sheet()` method automatically detects if it's called from within an existing sheet and creates a child sheet. No need for separate `childSheet()` method. Uses a `sheetStack: [SheetPresentation<Route>]` internally to track the hierarchy (Router.swift:163-173).
 
 7. **Universal overlay** - Persistent overlay views that float above navigation content but below modals. Accessed via `router.universalOverlay()`. TabRouterView renders the current tab's overlay above the tab bar.
 
@@ -106,7 +106,7 @@ The library supports presenting sheets from within sheets (child sheets) with au
 - `dismissSheet()` pops from the stack (returns to parent if hierarchy exists)
 - `dismissAllSheets()` clears entire stack and invokes all dismiss handlers in reverse order
 - Each sheet in the hierarchy can have its own detents, drag indicators, background interaction, and dismiss handlers
-- RouterView uses `HierarchicalSheetModifier` with item-based binding for each level (RouterView.swift:97-144)
+- RouterView uses `HierarchicalSheetModifier` with item-based binding for each level (RouterView.swift:109-155)
 
 ## Universal Overlay
 
@@ -116,7 +116,7 @@ The library supports persistent overlay views that float above navigation conten
 1. **Router-level overlay** - Tied to a specific Router instance. In TabRouterView, dismissed when switching tabs.
 2. **TabRouter-level overlay** - Persists across tab switches. Use when overlay should remain visible regardless of selected tab.
 
-**Mutual Exclusion:** Only one overlay can be active at a time. Presenting a TabRouter overlay dismisses any Router overlay, and vice versa. This is enforced via `onOverlayPresenting` callback on Router (Router.swift:54-56).
+**Mutual Exclusion:** Only one overlay can be active at a time. Presenting a TabRouter overlay dismisses any Router overlay, and vice versa. This is enforced via `onOverlayPresenting` callback on Router (Router.swift:57).
 
 **Router API:**
 - `universalOverlayRoute: Route?` - The currently displayed overlay route
@@ -142,17 +142,25 @@ The library supports persistent overlay views that float above navigation conten
 
 **TabRouterView Integration:**
 - TabRouterView uses `.disableUniversalOverlay()` on child RouterViews to prevent duplicate overlay rendering
-- Prioritizes TabRouter's overlay, falls back to current router's overlay (TabRouterView.swift:72-81)
+- Prioritizes TabRouter's overlay, falls back to current router's overlay (TabRouterView.swift:73-81)
 - Overlays render above the TabView and tab bar
 
 ## Testing
 
-Tests use Swift Testing framework (`import Testing`). Current test coverage is minimal (see Tests/NavTimeTests/NavTimeTests.swift:4-6).
+Tests use Swift Testing framework (`import Testing`). Run with `swift test`.
 
-When adding tests, focus on:
-- Router navigation stack manipulation (push/pop/popToRoot/switchRoot)
-- Modal presentation state management and conflict resolution
-- Hierarchical sheet presentation and dismissal
-- TabRouter tab switching and stack isolation
-- Dismiss handler invocation
-- Universal overlay mutual exclusion between Router and TabRouter
+### Test Organization
+
+Tests are in `Tests/NavTimeTests/` organized by category:
+
+- `Fixtures.swift` - Shared `TestRoute` and `TestTab` types
+- `RouterNavigationTests.swift` - push, pop, popToRoot, switchRoot
+- `RouterSheetTests.swift` - Sheet presentation and dismissal
+- `RouterFullScreenCoverTests.swift` - fullScreenCover presentation and dismissal
+- `HierarchicalSheetTests.swift` - Child sheet hierarchy
+- `ModalConflictTests.swift` - Sheet/cover conflict resolution
+- `RouterOverlayTests.swift` - Router universal overlay
+- `TabRouterTests.swift` - Tab switching and stack isolation
+- `TabRouterOverlayTests.swift` - TabRouter universal overlay
+
+When adding tests, use the shared `TestRoute` and `TestTab` fixtures from `Fixtures.swift`. All test suites must be marked `@MainActor` and use `@Suite` for grouping.
