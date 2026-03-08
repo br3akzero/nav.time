@@ -1,4 +1,4 @@
-# Agent.md - NavTime Navigation Framework Guide for AI Agents
+# NavTime Navigation Framework Guide for AI Agents
 
 This guide explains how to implement navigation in SwiftUI apps using the NavTime framework. Follow these patterns exactly.
 
@@ -140,69 +140,9 @@ struct HomeView: View {
 
 For apps with tabs, use `TabRoutable` and `TabRouterView`.
 
-### Step 1: Define Tab Routes
+### Step 1: Define Tabs
 
-Each tab needs its own `Routable` enum for its navigation stack:
-
-```swift
-@MainActor
-enum HomeRoute: Routable {
-    case feed
-    case postDetail(id: String)
-
-    var id: String {
-        switch self {
-        case .feed: "feed"
-        case .postDetail(let id): "post-\(id)"
-        }
-    }
-
-    var description: String {
-        switch self {
-        case .feed: "Feed"
-        case .postDetail(let id): "Post(\(id))"
-        }
-    }
-
-    var body: some View {
-        switch self {
-        case .feed: FeedView()
-        case .postDetail(let id): PostDetailView(postId: id)
-        }
-    }
-}
-
-@MainActor
-enum ProfileRoute: Routable {
-    case profile
-    case editProfile
-
-    var id: String {
-        switch self {
-        case .profile: "profile"
-        case .editProfile: "edit-profile"
-        }
-    }
-
-    var description: String {
-        switch self {
-        case .profile: "Profile"
-        case .editProfile: "Edit Profile"
-        }
-    }
-
-    var body: some View {
-        switch self {
-        case .profile: ProfileView()
-        case .editProfile: EditProfileView()
-        }
-    }
-}
-```
-
-### Step 2: Define Tabs
-
-Create a `TabRoutable` enum. All tabs must share the same Route type:
+All tabs share the same `RouteType`. Define a `TabRoutable` enum that references your existing `Routable` enum:
 
 ```swift
 @MainActor
@@ -250,7 +190,7 @@ enum AppTab: TabRoutable {
 }
 ```
 
-### Step 3: Use TabRouterView
+### Step 2: Use TabRouterView
 
 ```swift
 @main
@@ -275,6 +215,17 @@ struct SomeView: View {
         }
     }
 }
+```
+
+### Accessing Individual Tab Routers
+
+```swift
+// Get the router for the currently selected tab
+let router = tabRouter.currentRouter
+
+// Get the router for a specific tab
+let profileRouter = tabRouter.router(for: .profile)
+profileRouter.push(.editProfile)
 ```
 
 ## Sheet Presentation Patterns
@@ -715,6 +666,67 @@ struct MyApp: App {
     }
 }
 ```
+
+## Testing
+
+Tests use Swift Testing framework (`import Testing`). Run with `swift test`.
+
+### Test Organization
+
+Tests are in `Tests/NavTimeTests/` organized by category:
+
+| File | Coverage |
+|------|----------|
+| `Fixtures.swift` | Shared `TestRoute` and `TestTab` types |
+| `RouterNavigationTests.swift` | push, pop, popToRoot, switchRoot |
+| `RouterSheetTests.swift` | Sheet presentation and dismissal |
+| `RouterFullScreenCoverTests.swift` | fullScreenCover presentation and dismissal |
+| `HierarchicalSheetTests.swift` | Child sheet hierarchy |
+| `ModalConflictTests.swift` | Sheet/cover conflict resolution |
+| `RouterOverlayTests.swift` | Router universal overlay |
+| `TabRouterTests.swift` | Tab switching and stack isolation |
+| `TabRouterOverlayTests.swift` | TabRouter universal overlay |
+
+### Writing Tests
+
+Router and TabRouter are `@Observable` classes that can be tested directly without SwiftUI views:
+
+```swift
+import Testing
+import SwiftUI
+@testable import NavTime
+
+@Suite("My Feature Tests")
+@MainActor
+struct MyFeatureTests {
+
+    @Test("push adds route to stack")
+    func pushAddsRoute() {
+        let router = Router<TestRoute>(root: .home)
+        router.push(.detail)
+        #expect(router.routes == [.detail])
+    }
+
+    @Test("sheet presents modal")
+    func sheetPresentsModal() {
+        let router = Router<TestRoute>(root: .home)
+        router.sheet(.settings)
+        #expect(router.sheetRoute == .settings)
+        #expect(router.sheetStack.count == 1)
+    }
+
+    @Test("tab switching is isolated")
+    func tabSwitching() {
+        let tabRouter = TabRouter<TestTab>()
+        tabRouter.router(for: .first).push(.detail)
+        tabRouter.switchTab(to: .second)
+        #expect(tabRouter.router(for: .first).routes == [.detail])
+        #expect(tabRouter.router(for: .second).routes.isEmpty)
+    }
+}
+```
+
+Use the shared `TestRoute` and `TestTab` fixtures from `Fixtures.swift`. All test suites must be marked `@MainActor`.
 
 ## Summary
 
